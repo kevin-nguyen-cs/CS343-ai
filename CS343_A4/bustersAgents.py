@@ -164,6 +164,26 @@ class GreedyBustersAgent(BustersAgent):
              if livingGhosts[i+1]]
 
         "*** YOUR CODE HERE ***"
-        --SOLUTION CODE REMOVED UNTIL COURSE FINISHES IN 2018--
+        maxPos = tuple()
+        maxBelief = -99999
+        #Iterate through all position, acquire position with highest belief
+        for pos in livingGhostPositionDistributions[0].keys():
+            curBelief = livingGhostPositionDistributions[0][pos]
+            if curBelief > maxBelief:
+                maxBelief = curBelief
+                maxPos = pos
+
+        #Current Distance to goal
+        curDist = self.distancer.getDistance(pacmanPosition, maxPos)
+
+        rightAction = None
+        #Iterate through all actions, pick action that minimizes distance
+        for action in legal:
+            successor = Actions.getSuccessor(pacmanPosition, action)
+            newDist = self.distancer.getDistance(successor, maxPos)
+            if newDist < curDist:
+                rightAction = action
+
+        return rightAction
 
         
