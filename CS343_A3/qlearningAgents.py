@@ -205,4 +205,35 @@ class ApproximateQAgent(PacmanQAgent):
            Should update your weights based on transition
         """
         "*** YOUR CODE HERE ***"
-        --SOLUTION CODE REMOVED UNTIL COURSE FINISHES IN 2018--
+        #Local Declarations
+        maxQValue = self.getMaxQValue(nextState) #Get max Q Value for Q(s',a')
+        qValue = self.getQValue(state,action) #self.getQValue(state, action) #Get Q Value for Q(s,a)
+        difference = ((reward+self.discount*maxQValue) - qValue) #Compute Difference
+        #Loop through each item in the vector and update it for given (state, action) pair that's passed into this function
+        for key in self.weights:
+          newWeight = self.weights[key] + (self.alpha*difference*self.featExtractor.getFeatures(state, action)[key]) #compute new weight values
+          self.weights[key] = newWeight #update the weight vector with new value
+
+    #Copy and pasted from QLearningAgent so ApproxQLearning has separate local function to reference
+    def getMaxQValue(self, state):
+        #Local Declarations
+        actionList = self.getLegalActions(state)
+        listOfQVals = list()
+        #if no legal actions
+        if not actionList:
+          return 0.0
+        #make a list of all q values, then take the max
+        for action in actionList:
+          listOfQVals.append(self.getQValue(state, action))
+        return max(listOfQVals) #return best value form list
+        util.raiseNotDefined()
+
+    def final(self, state):
+        "Called at the end of each game."
+        # call the super-class final method
+        PacmanQAgent.final(self, state)
+        # did we finish training?
+        if self.episodesSoFar == self.numTraining:
+            # you might want to print your weights here for debugging
+            "*** YOUR CODE HERE ***"
+            pass
